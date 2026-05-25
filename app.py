@@ -1,6 +1,8 @@
 import streamlit as st
 from CalculadoraUI import MecanismoCalculadora
 from Diferencias_Finitas_Class import DiferenciasFinitas
+from Metodo3y5Puntos import Metodo3y5Puntos
+from OrdenSuperior import OrdenSuperior
 
 st.set_page_config(page_title="Zen Calc - Análisis Numérico", layout="wide")
 
@@ -258,7 +260,7 @@ with col_metodos:
                 )
 
                 # 3. Obtenemos el array de strings con los resultados
-                lista_resultados = solucionador.calcular_todas()
+                lista_resultados = solucionador.calcular()
 
                 # 4. Mostramos SOLO diferencias finitas clásicas
                 st.write("Resultados de Diferencias Finitas:")
@@ -280,20 +282,19 @@ with col_metodos:
                 string_ecuacion = calc.obtener_expresion()
 
                 # Instanciamos la clase
-                solucionador = DiferenciasFinitas(
+                solucionador = Metodo3y5Puntos(
                     string_ecuacion,
                     x_value,
                     h_value
                 )
 
-                # Obtenemos todos los resultados
-                lista_resultados = solucionador.calcular_todas()
+                lista_resultados = solucionador.calcular()
 
                 # Mostramos solamente 3 y 5 puntos
                 st.write("Resultados del Método de 3 y 5 puntos:")
 
-                st.success(lista_resultados[6])
-                st.success(lista_resultados[7])
+                for res in lista_resultados:
+                    st.success(res)
 
             except Exception as err:
                 st.error(f"❌ {err}")
@@ -310,14 +311,13 @@ with col_metodos:
                 string_ecuacion = calc.obtener_expresion()
 
                 # Instanciamos la clase matemática
-                solucionador = DiferenciasFinitas(
+                solucionador = OrdenSuperior(
                     string_ecuacion,
                     x_value,
                     h_value
                 )
 
-                # Llamamos el nuevo método
-                lista_resultados = solucionador.calcular_orden_superior()
+                lista_resultados = solucionador.calcular()
 
                 # ---------------------------------------------------
                 # VISUALIZACIÓN
