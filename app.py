@@ -3,6 +3,8 @@ from CalculadoraUI import MecanismoCalculadora
 from Diferencias_Finitas_Class import DiferenciasFinitas
 from Metodo3y5Puntos import Metodo3y5Puntos
 from OrdenSuperior import OrdenSuperior
+from Richardson import Richardson
+import pandas as pd
 
 st.set_page_config(page_title="Zen Calc - Análisis Numérico", layout="wide")
 
@@ -225,13 +227,42 @@ with col_metodos:
     casos_diferenciacion = [
         "1. Diferencias finitas",
         "2. Metodo de 3 y 5 puntos",
-        "3. Derivada de orden superior"
+        "3. Derivada de orden superior",
+        "4. Extrapolación de Richardson"
     ]
 
     metodo_seleccionado = st.selectbox(
-        "Selecciona el esquema de diferenciación:",
-        casos_diferenciacion
+    "Selecciona el esquema de diferenciación:",
+    casos_diferenciacion
     )
+
+    # --------------------------------------------------
+    # CONTROLES DE RICHARDSON
+    # --------------------------------------------------
+
+    if metodo_seleccionado == "4. Extrapolación de Richardson":
+
+        esquema_richardson = st.selectbox(
+            "Esquema base",
+            [
+                "Adelante (Primera Dif)",
+                "Adelante (Segunda Dif)",
+                "Atrás (Primera Dif)",
+                "Atrás (Segunda Dif)",
+                "Central (Primera Dif)",
+                "Central (Segunda Dif)"
+            ],
+            key = "richardson_esquema"
+        )
+
+        niveles_richardson = st.number_input(
+            "Número de niveles (n)",
+            min_value=2,
+            max_value=10,
+            value=4,
+            step=1,
+            key = "richardson_niveles"
+        )
 
     st.write("---")
 
@@ -337,3 +368,67 @@ with col_metodos:
 
             except Exception as err:
                 st.error(f"❌ {err}")
+
+        
+
+                # -------------------------------------------------------
+        # 4. EXTRAPOLACIÓN DE RICHARDSON
+        # -------------------------------------------------------
+
+        elif metodo_seleccionado == "4. Extrapolación de Richardson":
+
+            try:
+
+                string_ecuacion = calc.obtener_expresion()
+
+                solucionador = Richardson(
+                    string_ecuacion,
+                    x_value,
+                    h_value,
+                    esquema_richardson,
+                    niveles_richardson
+                )
+
+                tabla = solucionador.calcular()
+
+                st.write("Tabla de Extrapolación de Richardson")
+
+                columnas = [
+                    f"D{i}"
+                    for i in range(niveles_richardson)
+                ]
+
+                tabla_visual = []
+
+                for fila in tabla:
+
+                    nueva_fila = []
+
+                    for valor in fila:
+
+                        if valor == 0:
+                            nueva_fila.append("")
+                        else:
+                            nueva_fila.append(
+                                round(valor, 10)
+                            )
+
+                    tabla_visual.append(nueva_fila)
+
+                df = pd.DataFrame(
+                    tabla_visual,
+                    columns=columnas
+                )
+
+                st.dataframe(
+                    df,
+                    use_container_width=True
+                )
+
+                st.success(
+                    f"Resultado Richardson = "
+                    f"{tabla[0][niveles_richardson - 1]:.10f}"
+                )
+
+            except Exception as err:
+                st.error(f"❌ {err}")    
