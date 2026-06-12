@@ -120,7 +120,7 @@ class OrdenSuperior(EvaluadorFunciones):
         ) / (12*(h**2))
 
         cen2_tercera = (
-            -fp3 + 8*fp2 - 2*fp1 +
+            -fp3 + 8*fp2 - 12*fp1 +
             12*fm1 - 8*fm2 + fm3
         ) / (8*(h**3))
 
