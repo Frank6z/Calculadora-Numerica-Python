@@ -58,7 +58,7 @@ class OrdenSuperior(EvaluadorFunciones):
 
         ad2_cuarta = (
             -2*fp5 + 11*fp4 - 24*fp3 +
-            26*fp2 - 3*fp1 + f0
+            26*fp2 - 14*fp1 + 3*f0
         ) / (h**4)
 
         # ===================================================
