@@ -431,4 +431,14 @@ with col_metodos:
                 )
 
             except Exception as err:
-                st.error(f"❌ {err}")    
+                st.error(f"❌ {err}")   
+
+
+derechos_texto = """
+<div style="text-align: center;">
+    <span>© 2026 Todos los derechos reservados.</span>
+</div>
+"""
+
+# Renderizar el texto en la aplicación
+st.markdown(derechos_texto, unsafe_allow_html=True)
